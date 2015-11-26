@@ -1,6 +1,15 @@
 <template name="home">
+  {{#if isSandstorm}}
+    {{#if sandstormGameMode "single"}}
+      <h2>One player!</h2>
+    {{/if}}
+    {{#if sandstormGameMode "two-player"}}
+      <h2>Two players!</h2>
+    {{/if}}
+  {{else}}
   <h1>{{_ "welcome-to-polytunes"}}</h1>
   <a class="btn" href="{{pathFor 'join'}}">{{_ "play-with-a-stranger"}}</a>
   <a class="btn" href="{{pathFor 'create'}}">{{_ "play-with-a-friend"}}</a>
   <a class="btn" href="{{pathFor 'solo'}}">{{_ "play-solo-offline"}}</a>
+  {{/if}}
 </template>

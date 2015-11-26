@@ -27,10 +27,13 @@ const pkgdef :Spk.PackageDefinition = (
 
     actions = [
       # Define your "new document" handlers here.
-      ( title = (defaultText = "New Game"),
-        command = .myCommand
-        # The command to run when starting for the first time. (".myCommand"
+      ( title = (defaultText = "New single game"),
+        command = .singleGame
+        # The command to run when starting for the first time. (".singleGame"
         # is just a constant defined at the bottom of the file.)
+      ),
+      ( title = (defaultText = "New two-player game"),
+        command = .twoPlayerGame
       )
     ],
 
@@ -226,6 +229,32 @@ const myCommand :Spk.Manifest.Command = (
     (key = "PATH", value = "/usr/local/bin:/usr/bin:/bin"),
     (key = "SANDSTORM", value = "1"),
     (key = "METEOR_SETTINGS", value = "{\"public\": {\"sandstorm\": true}}"),
+    # Export SANDSTORM=1 into the environment, so that apps running within Sandstorm
+    # can detect if $SANDSTORM="1" at runtime, switching UI and/or backend to use
+    # the app's Sandstorm-specific integration code.
+  ]
+);
+const singleGame :Spk.Manifest.Command = (
+  # Here we define the command used to start up your server.
+  argv = ["/sandstorm-http-bridge", "8000", "--", "/opt/app/.sandstorm/launcher.sh"],
+  environ = [
+    # Note that this defines the *entire* environment seen by your app.
+    (key = "PATH", value = "/usr/local/bin:/usr/bin:/bin"),
+    (key = "SANDSTORM", value = "1"),
+    (key = "METEOR_SETTINGS", value = "{\"public\": {\"sandstorm\": true, \"game_mode\": \"single\"}}")
+    # Export SANDSTORM=1 into the environment, so that apps running within Sandstorm
+    # can detect if $SANDSTORM="1" at runtime, switching UI and/or backend to use
+    # the app's Sandstorm-specific integration code.
+  ]
+);
+const twoPlayerGame :Spk.Manifest.Command = (
+  # Here we define the command used to start up your server.
+  argv = ["/sandstorm-http-bridge", "8000", "--", "/opt/app/.sandstorm/launcher.sh"],
+  environ = [
+    # Note that this defines the *entire* environment seen by your app.
+    (key = "PATH", value = "/usr/local/bin:/usr/bin:/bin"),
+    (key = "SANDSTORM", value = "1"),
+    (key = "METEOR_SETTINGS", value = "{\"public\": {\"sandstorm\": true, \"game_mode\": \"two-player\"}}")
     # Export SANDSTORM=1 into the environment, so that apps running within Sandstorm
     # can detect if $SANDSTORM="1" at runtime, switching UI and/or backend to use
     # the app's Sandstorm-specific integration code.
