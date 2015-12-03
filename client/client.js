@@ -23,6 +23,9 @@ Meteor.startup( function() {
 });
 
 Template.home.helpers({
+  notLogged: function () {
+    return ! Meteor.user().profile.name
+  },
   rooms: function() {
     return Polytunes.Rooms.find({ isPublic: true });
   }
@@ -57,17 +60,16 @@ Template.join.onCreated(function() {
 });
 
 Template.roomPlay.helpers({
-  notLogged: function () {
-    return ! Meteor.user().profile.name
-  },
   notEnoughPlayers: function() {
-    return (this.room.players.length < 2);
+    let room = Polytunes.Rooms.findOne({});
+    return room && room.players && room.players.length < 2;
   }
 });
 
 Template.waitingForPlayers.helpers({
   isPublic: function() {
-    return this.room.isPublic;
+    return false;
+    //return this.room.isPublic;
   },
   currentUrl: function() {
     return window.location.href;
@@ -87,20 +89,38 @@ Template.waitingForPlayers.onDestroyed(function () {
 });
 
 Template.roomPlay.onCreated(function() {
-  let room = this.data.room,
-    user = Meteor.user();
+  let room = Polytunes.Rooms.findOne({ isPublic: true });
+  if (!room) {
+    Meteor.call("createRoom", { isPublic: true }, function(error, roomId) {
+      console.log("created room: " + roomId);
+      Meteor.call("userJoinsRoom", roomId, function(error, result) {
+        if (error) {console.log("error calling userJoinsRoom: " + error);}
+        else {
+          Session.set("currentRoom", Polytunes.Rooms.findOne(roomId));
+        }
+      });
+    });
+  } else {
+    // Room is defined
+    Session.set("currentRoom", room);
+    Meteor.call("userJoinsRoom", room._id, function(error, result) {
+      if (error) {console.log("error calling userJoinsRoom: " + error);}
+    });
+  }
 
+  let user = Meteor.user();
+
+  /*
   if (!user.profile.name) {
     Router.go("login", { roomId: room._id });
   }
+  */
 
-  if (room.players.length >= 2) {
+  if (room && room.players && room.players.length >= 2) {
     toastr.info(TAPi18n.__('room-full-watch-mode'));
-    Router.go("roomWatch", { _id: room._id });
+    //Router.go("roomWatch", { _id: room._id });
   }
 
-  Session.set("currentRoom", room);
-  Meteor.call("userJoinsRoom", room._id);
 });
 
 Template.roomPlay.onDestroyed(function() {
@@ -131,7 +151,7 @@ Template.solo.onDestroyed(function() {
 let boardData;
 Template.board.helpers({
   rows: function () {
-    let room = this.room;
+    let room = Polytunes.Rooms.findOne();
 
     if (!room)
       return false;
@@ -157,7 +177,7 @@ Template.board.helpers({
 
 Template.players.helpers({
   players: function() {
-    return this.room.players;
+    return Polytunes.Rooms.findOne().players;
   }
 });
 Template.controls.helpers({
@@ -179,7 +199,7 @@ Template.login.events({
     event.preventDefault();
     const params = Router.current().params;
     Meteor.call('guestLogin', event.target.name.value, (error, result) => {
-      Router.go('roomPlay', { _id: params.roomId });
+      //Router.go('roomPlay', { _id: params.roomId });
     });
     return false;
   }

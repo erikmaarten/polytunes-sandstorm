@@ -1,15 +1,11 @@
 <template name="roomPlay">
   <div class="room play">
-    {{#if notLogged}}
-      {{> login}}
+    {{#if notEnoughPlayers}}
+      {{> waitingForPlayers}}
     {{else}}
-      {{#if notEnoughPlayers}}
-        {{> waitingForPlayers}}
-      {{else}}
-        {{> board}}
-        {{> players}}
-        {{> controls}}
-      {{/if}}
+      {{> board}}
+      {{> players}}
+      {{> controls}}
     {{/if}}
   </div>
 </template>

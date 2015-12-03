@@ -1,10 +1,14 @@
 <template name="home">
   {{#if isSandstorm}}
-    {{#if sandstormGameMode "single"}}
-      <h2>One player!</h2>
-    {{/if}}
-    {{#if sandstormGameMode "two-player"}}
-      <h2>Two players!</h2>
+    {{#if notLogged}}
+      {{> login}}
+    {{else}}
+      {{#if sandstormGameMode "single"}}
+        {{> solo}}
+      {{/if}}
+      {{#if sandstormGameMode "two-player"}}
+        {{> roomPlay}}
+      {{/if}}
     {{/if}}
   {{else}}
   <h1>{{_ "welcome-to-polytunes"}}</h1>
