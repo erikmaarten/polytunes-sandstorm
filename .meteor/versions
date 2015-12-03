@@ -50,6 +50,7 @@ iron:router@1.0.12
 iron:url@1.0.11
 iwazaru:synth@0.1.0
 jquery@1.11.4
+kenton:accounts-sandstorm@0.1.8
 launch-screen@1.0.4
 livedata@1.0.15
 localstorage@1.0.5
