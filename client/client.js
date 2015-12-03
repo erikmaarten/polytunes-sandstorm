@@ -124,7 +124,7 @@ Template.roomPlay.onCreated(function() {
 });
 
 Template.roomPlay.onDestroyed(function() {
-  let room = this.data.room;
+  let room = Polytunes.Rooms.findOne();
   Meteor.call("userLeavesRoom", room._id);
   if (Session.get("playing")) {
     window.togglePlay();
@@ -133,12 +133,12 @@ Template.roomPlay.onDestroyed(function() {
 });
 
 Template.roomWatch.onCreated(function() {
-  let room = this.data.room;
+  let room = Polytunes.Rooms.findOne();
   Session.set("currentRoom", room);
 });
 
 Template.solo.onCreated(function() {
-  let room = this.data.room;
+  let room = Polytunes.Rooms.findOne();
   Session.set("currentRoom", room);
 });
 
@@ -297,7 +297,7 @@ Template.roomWatch.events({
 
 Template.controls.events({
   'click #play': function (event, template) {
-    window.togglePlay(this.room);
+    window.togglePlay();
     window.instrument.playNote(1); // Hack to fix sound in Safari iOS
   }
 });
