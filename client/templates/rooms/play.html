@@ -18,22 +18,29 @@
   {{#if isPublic}}
     <p>{{_ "waiting-in-public-room"}}</p>
   {{else}}
-    <p>{{_ "waiting-in-private-room"}}</p>
+    {{#if isSandstorm}}
+      <p>{{_ "waiting-in-private-room-sandstorm"}}</p>
+    {{else}}
+      <p>{{_ "waiting-in-private-room"}}</p>
+    {{/if}}
   {{/if}}
 
-  <p>{{_ "waiting-invite-with-url"}}</p>
-
-  <input id="shareUrl" type="url" value="{{currentUrl}}" class="btn-large btn-inline"> &nbsp;
-  <i class="fa fa-lg fa-clipboard pointer clipboard" data-clipboard-target="#shareUrl"></i>
-  <a href="https://www.facebook.com/sharer/sharer.php?u={{currentUrl}}" target="_blank">
-    <i class="fa fa-facebook-square fa-lg"></i>
-  </a>
-  <a href="https://twitter.com/home?status={{currentUrl}}" target="_blank">
-    <i class="fa fa-twitter-square fa-lg"></i>
-  </a>
-  <a href="https://plus.google.com/share?url={{currentUrl}}" target="_blank">
-    <i class="fa fa-google-plus-square fa-lg"></i>
-  </a>
+  {{#if isSandstorm}}
+    <p>{{_ "waiting-invite-with-url-sandstorm"}}</p>
+  {{else}}
+    <p>{{_ "waiting-invite-with-url"}}</p>
+    <input id="shareUrl" type="url" value="{{currentUrl}}" class="btn-large btn-inline"> &nbsp;
+    <i class="fa fa-lg fa-clipboard pointer clipboard" data-clipboard-target="#shareUrl"></i>
+    <a href="https://www.facebook.com/sharer/sharer.php?u={{currentUrl}}" target="_blank">
+      <i class="fa fa-facebook-square fa-lg"></i>
+    </a>
+    <a href="https://twitter.com/home?status={{currentUrl}}" target="_blank">
+      <i class="fa fa-twitter-square fa-lg"></i>
+    </a>
+    <a href="https://plus.google.com/share?url={{currentUrl}}" target="_blank">
+      <i class="fa fa-google-plus-square fa-lg"></i>
+    </a>
+  {{/if}}
 
 </template>
 
