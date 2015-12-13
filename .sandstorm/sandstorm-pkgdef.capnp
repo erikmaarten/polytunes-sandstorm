@@ -27,17 +27,17 @@ const pkgdef :Spk.PackageDefinition = (
 
     actions = [
       # Define your "new document" handlers here.
-      ( title = (defaultText = "New single game"),
-        command = .singleGame
+      # ( title = (defaultText = "New single game"),
+        # command = .singleGame
         # The command to run when starting for the first time. (".singleGame"
         # is just a constant defined at the bottom of the file.)
-      ),
+      # ),
       ( title = (defaultText = "New two-player game"),
         command = .twoPlayerGame
       )
     ],
 
-    continueCommand = .myCommand,
+    continueCommand = .continueExistingGame,
     # This is the command called to start your app back up after it has been
     # shut down for inactivity. Here we're using the same command as for
     # starting a new instance, but you could use different commands for each
@@ -221,14 +221,14 @@ const pkgdef :Spk.PackageDefinition = (
   #),
 );
 
-const myCommand :Spk.Manifest.Command = (
+const continueExistingGame :Spk.Manifest.Command = (
   # Here we define the command used to start up your server.
   argv = ["/sandstorm-http-bridge", "8000", "--", "/opt/app/.sandstorm/launcher.sh"],
   environ = [
     # Note that this defines the *entire* environment seen by your app.
     (key = "PATH", value = "/usr/local/bin:/usr/bin:/bin"),
     (key = "SANDSTORM", value = "1"),
-    (key = "METEOR_SETTINGS", value = "{\"public\": {\"sandstorm\": true}}"),
+    (key = "METEOR_SETTINGS", value = "{\"public\": {\"sandstorm\": true, \"game_mode\": \"existing_game\"}}"),
     # Export SANDSTORM=1 into the environment, so that apps running within Sandstorm
     # can detect if $SANDSTORM="1" at runtime, switching UI and/or backend to use
     # the app's Sandstorm-specific integration code.

@@ -23,6 +23,12 @@ Meteor.startup( function() {
 });
 
 Template.home.helpers({
+  noExistingGame: function() {
+    return Polytunes.Rooms.find().count() === 0;
+  },
+  gameTemplateName: function() {
+    return Polytunes.Rooms.findOne().gameType;
+  },
   notLogged: function () {
     return ! Meteor.user().profile.name
   },
